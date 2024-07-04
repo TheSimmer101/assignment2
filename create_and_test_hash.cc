@@ -13,17 +13,17 @@ using namespace std;
 
 
 // You can add more functions here
-// int wordToInt(string w)
-// {
-//     long long result = 0;
-//     int index = w.length()-1;
-//     for(char c: w)
-//     {
-//         result+= (int)(c)*pow(26,index);
-//         index--;
-//     }
-//      return result;   
-// }
+int wordToInt(string w)
+{
+    long long result = 0;
+    int index = w.length()-1;
+    for(char c: w)
+    {
+        result+= (int)(c)*pow(26,index);
+        index--;
+    }
+     return result;   
+}
 vector<string> createVector(string file)
 {
    
@@ -52,7 +52,11 @@ void TestFunctionForHashTable(HashTableType &hash_table, const string &words_fil
     vector<string> words = createVector(words_filename);
     vector<string> queries = createVector(query_filename);
     
-    
+    for(string s: words)
+    {
+        hash_table.Insert(s);
+        cout << s << endl;
+    }
     
     
 
