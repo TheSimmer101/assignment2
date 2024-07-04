@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-
+#include <cmath>
 // Uncomment when you implemented linear probing & double hashing
 // #include "linear_probing.h"
 //#include "double_hashing.h"
@@ -13,15 +13,48 @@ using namespace std;
 
 
 // You can add more functions here
-
+long long wordToInt(string w)
+{
+    long long result = 0;
+    int index = w.length()-1;
+    for(char c: w)
+    {
+        result+= (int)(c)*pow(26,index);
+        index--;
+    }
+     return result;   
+}
+vector<string> createVector(string file)
+{
+    //ifstream code copied from 135 Lab 3 Instructions (Fall 2023)
+    vector<string> result = {};
+    ifstream words(file);
+    if (words.fail()) {
+        cerr << "ERROR" << endl;
+        exit(1); // exit if failed to open the file
+    }
+    string wordInput = "";
+    while(cin >> wordInput)
+    {
+        result.push_back(wordInput);
+    }
+    return result;
+}
 // @hash_table: a hash table (can be linear, quadratic, or double)
 // @words_filename: a filename of input words to construct the hash table
 // @query_filename: a filename of input words to test the hash table
 template <typename HashTableType>
-void TestFunctionForHashTable(HashTableType &hash_table,
-			      const string &words_filename,
-			      const string &query_filename) {
+void TestFunctionForHashTable(HashTableType &hash_table, const string &words_filename,const string &query_filename) 
+{
     hash_table.MakeEmpty();
+    
+    vector<string> words = createVector(words_filename);
+    vector<string> queries = createVector(query_filename);
+    
+    
+    
+    
+
     //..Insert your own code
 
 }
