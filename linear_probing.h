@@ -9,9 +9,21 @@ using namespace std;
 template <typename HashedObj>
 class HashTableLinear {
  public:
+
+ int wordToInt(string w)
+{
+    long long result = 0;
+    int index = w.length()-1;
+    for(char c: w)
+    {
+        result+= (int)(c)*pow(26,index);
+        index--;
+    }
+     return result;   
+}
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTable(size_t size = 101) : array_(NextPrime(size))
+  explicit HashTableLinear(size_t size = 101) : array_(NextPrime(size))
     { MakeEmpty(); }
   
   bool Contains(const HashedObj & x) const {
@@ -29,8 +41,10 @@ class HashTableLinear {
     size_t current_pos = FindPos(x);
     if (IsActive(current_pos))
       return false;
-    
-    array_[current_pos].element_ = x;
+
+    current_pos = wordToInt(x);
+    // array_[current_pos].element_ = x;
+     array_[current_pos].element_ = x;
     array_[current_pos].info_ = ACTIVE;
     
     // Rehash; see Section 5.5
@@ -45,6 +59,7 @@ class HashTableLinear {
     if (IsActive(current_pos))
       return false;
     
+    current_pos = wordToInt(x);
     array_[current_pos] = std::move(x);
     array_[current_pos].info_ = ACTIVE;
 

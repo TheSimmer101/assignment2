@@ -8,24 +8,25 @@
 //#include "double_hashing.h"
 
 #include "quadratic_probing.h"
-
+#include "linear_probing.h"
 using namespace std;
 
 
 // You can add more functions here
-long long wordToInt(string w)
-{
-    long long result = 0;
-    int index = w.length()-1;
-    for(char c: w)
-    {
-        result+= (int)(c)*pow(26,index);
-        index--;
-    }
-     return result;   
-}
+// int wordToInt(string w)
+// {
+//     long long result = 0;
+//     int index = w.length()-1;
+//     for(char c: w)
+//     {
+//         result+= (int)(c)*pow(26,index);
+//         index--;
+//     }
+//      return result;   
+// }
 vector<string> createVector(string file)
 {
+   
     //ifstream code copied from 135 Lab 3 Instructions (Fall 2023)
     vector<string> result = {};
     ifstream words(file);
@@ -74,9 +75,9 @@ int testHashingWrapper(int argument_count, char **argument_list) {
 
     if (param_flag == "linear") {
       // Uncomment below when you have implemented linear probing.
-      // HashTableLinear<string> linear_probing_table;
-      // TestFunctionForHashTable(linear_probing_table, words_filename,
-      // 			 query_filename);
+      HashTableLinear<string> linear_probing_table;
+      TestFunctionForHashTable(linear_probing_table, words_filename,
+      			 query_filename);
     } else if (param_flag == "quadratic") {
 	HashTable<string> quadratic_probing_table;
 	TestFunctionForHashTable(quadratic_probing_table, words_filename,
