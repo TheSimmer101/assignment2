@@ -44,21 +44,39 @@ vector<string> createVector(string file)
 // @hash_table: a hash table (can be linear, quadratic, or double)
 // @words_filename: a filename of input words to construct the hash table
 // @query_filename: a filename of input words to test the hash table
+
+/*
+Expected Output:
+number_of_elements: <int>
+size_of_table: <int>
+load_factor: <float>
+collisions: <int>
+avg_collisions: <float>
+<word1> Found <probes1>
+<word2> Not_Found <probes2>
+<word3> Found <probes3>
+*/
 template <typename HashTableType>
 void TestFunctionForHashTable(HashTableType &hash_table, const string &words_filename,const string &query_filename) 
 {
     hash_table.MakeEmpty();
     
     vector<string> words = createVector(words_filename);
+    cout << words[0];
     vector<string> queries = createVector(query_filename);
     
     for(string s: words)
     {
         hash_table.Insert(s);
         cout << s << endl;
+        cout << hash_table.Contains(s);
+        //cout << hash_table.FindPos(s);
     }
     
+    int countElements = 0;
+
     
+    cout << "there are " << countElements << " elements\n";
 
     //..Insert your own code
 
@@ -82,12 +100,12 @@ int testHashingWrapper(int argument_count, char **argument_list) {
       HashTableLinear<string> linear_probing_table;
       TestFunctionForHashTable(linear_probing_table, words_filename,
       			 query_filename);
-    } else if (param_flag == "quadratic") {
-	HashTable<string> quadratic_probing_table;
-	TestFunctionForHashTable(quadratic_probing_table, words_filename,
-				 query_filename);
-    } else if (param_flag == "double") {
-	cout << "r_value: " << R << endl;
+    // } else if (param_flag == "quadratic") {
+	// HashTable<string> quadratic_probing_table;
+	// TestFunctionForHashTable(quadratic_probing_table, words_filename,
+	// 			 query_filename);
+    // } else if (param_flag == "double") {
+	// cout << "r_value: " << R << endl;
         // Uncomment below when you have implemented double hashing.
 	// HashTableDouble<string> double_probing_table;
 	// TestFunctionForHashTable(double_probing_table, words_filename,

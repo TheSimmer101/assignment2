@@ -42,8 +42,8 @@ class HashTableLinear {
     if (IsActive(current_pos))
       return false;
 
-    current_pos = wordToInt(x);
-    // array_[current_pos].element_ = x;
+    //current_pos = wordToInt(x);
+    //array_[current_pos].element_ = x;
      array_[current_pos].element_ = x;
     array_[current_pos].info_ = ACTIVE;
     
@@ -59,7 +59,7 @@ class HashTableLinear {
     if (IsActive(current_pos))
       return false;
     
-    current_pos = wordToInt(x);
+    //current_pos = wordToInt(x);
     array_[current_pos] = std::move(x);
     array_[current_pos].info_ = ACTIVE;
 
@@ -111,7 +111,7 @@ class HashTableLinear {
     }
     return current_pos;
   }
-
+ 
   void Rehash() {
     std::vector<HashEntry> old_array = array_;
 
@@ -127,10 +127,18 @@ class HashTableLinear {
 	Insert(std::move(entry.element_));
   }
   
+  // size_t InternalHash(const string & s) const {
+  //   //static std::hash<HashedObj> hf;
+  //   //return hf(x) % array_.size( );
+
+  //   return wordToInt(s)
+  // }
   size_t InternalHash(const HashedObj & x) const {
     static std::hash<HashedObj> hf;
+    //return hf(x) % array_.size( );
     return hf(x) % array_.size( );
   }
+
 };
 
-#endif  // QUADRATIC_PROBING_H
+#endif  // LINEAR_PROBING_H

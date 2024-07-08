@@ -39,6 +39,11 @@ int NextPrime(size_t n) {
 template <typename HashedObj>
 class HashTable {
  public:
+
+  size_t currentSize()
+  {
+    return current_size_;
+  }
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
   explicit HashTable(size_t size = 101) : array_(NextPrime(size))
