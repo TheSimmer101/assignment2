@@ -37,12 +37,23 @@ int NextPrime(size_t n) {
 
 // Quadratic probing implementation.
 template <typename HashedObj>
+
 class HashTable {
  public:
 
   size_t currentSize()
   {
     return current_size_;
+  }
+
+  int totalElements()
+  {
+    return elementCount;
+  }
+
+  int totalProbes()
+  {
+    return probes;
   }
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
@@ -67,7 +78,7 @@ class HashTable {
     
     array_[current_pos].element_ = x;
     array_[current_pos].info_ = ACTIVE;
-    
+    totalElements++;
     // Rehash; see Section 5.5
     if (++current_size_ > array_.size() / 2)
       Rehash();    
@@ -82,7 +93,7 @@ class HashTable {
     
     array_[current_pos] = std::move(x);
     array_[current_pos].info_ = ACTIVE;
-
+    elementCount++;
     // Rehash; see Section 5.5
     if (++current_size_ > array_.size() / 2)
       Rehash();
@@ -99,6 +110,7 @@ class HashTable {
     return true;
   }
 
+
  private:        
   struct HashEntry {
     HashedObj element_;
@@ -114,21 +126,36 @@ class HashTable {
 
   std::vector<HashEntry> array_;
   size_t current_size_;
+//   Q1: The total number of elements in the table (N), the size of the table (T), the load factor (N/T), the
+// total number of collisions (C), and the average number of collisions (C/N).
 
+  int elementCount;
+
+  int probes;
+
+  void setProbes(int p)
+  {
+    probes = p;
+  }
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
   size_t FindPos(const HashedObj & x) const {
+    //reset # of probes so it keeps accurate track of probes per entry.
+    // One entry's probes are independent from another entry's. 
+    int probeTemp = 0;
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY &&
 	   array_[current_pos].element_ != x) {
+      probeTemp++;
       current_pos += offset;  // Compute ith probe.
       offset += 2;
       if (current_pos >= array_.size())
 	current_pos -= array_.size();
     }
+    setProbes(probeTemp);
     return current_pos;
   }
 
