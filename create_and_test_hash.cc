@@ -59,35 +59,36 @@ avg_collisions: <float>
 template <typename HashTableType>
 void TestFunctionForHashTable(HashTableType &hash_table, const string &words_filename,const string &query_filename) 
 {
-    cout << "hi";
+    //cout << "hi";
     hash_table.MakeEmpty();
     
     vector<string> words = createVector(words_filename);
-    cout << words[0];
+    //cout << words[0];
     vector<string> queries = createVector(query_filename);
     int countElements = 0;
     for(string s: words)
-    {
+    {   hash_table.Insert(s);
         // number_of_elements: <int>
         // size_of_table: <int>
         // load_factor: <float>
         // collisions: <int>
         // avg_collisions: <float>
 
-        cout << "number_of_elements: " << hash_table.totalElements();
-        cout << "\nsize_of_table: " << hash_table.currentSize();
-        cout << "\nload_factor: " << (float)(hash_table.totalElements())/hash_table.currentSize();
-        hash_table.Insert(s);
+      
+        
         //cout << s << endl;
         //cout << hash_table.Contains(s);
         //cout << hash_table.FindPos(s);
     }
     
-    
-
-    
-    cout << "there are " << countElements << " elements\n";
-    cout << "vector size: " << words.size();
+      cout << "number_of_elements: " << hash_table.totalElements();
+        cout << "\nsize_of_table: " << hash_table.currentSize();
+        cout << "\nload_factor: " << (float)(hash_table.totalElements())/hash_table.currentSize();
+        cout << "\ncollisions: " << hash_table.totalCollisions();
+        cout << "\navg_collisions: " << (float)hash_table.totalCollisions()/hash_table.totalElements();
+        cout << endl;
+    // cout << "there are " << countElements << " elements\n";
+    // cout << "vector size: " << words.size();
 
     //..Insert your own code
 

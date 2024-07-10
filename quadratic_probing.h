@@ -48,12 +48,24 @@ class HashTable {
 
   int totalElements()
   {
+    elementCount = 0;
+    for(int i = 0; i < current_size_; i++)
+    {
+      if(IsActive(i)) 
+        elementCount++;
+    }
+
     return elementCount;
   }
 
   int totalProbes()
   {
     return probes;
+  }
+
+  int totalCollisions()
+  {
+    return collisionsCount;
   }
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
@@ -73,12 +85,14 @@ class HashTable {
   bool Insert(const HashedObj & x) {
     // Insert x as active
     size_t current_pos = FindPos(x);
-    if (IsActive(current_pos))
-      return false;
-    
+     if (IsActive(current_pos))
+    {
+       collisionsCount++;
+       return false;
+    }
     array_[current_pos].element_ = x;
     array_[current_pos].info_ = ACTIVE;
-    totalElements++;
+    elementCount++;
     // Rehash; see Section 5.5
     if (++current_size_ > array_.size() / 2)
       Rehash();    
@@ -89,7 +103,11 @@ class HashTable {
     // Insert x as active
     size_t current_pos = FindPos(x);
     if (IsActive(current_pos))
-      return false;
+    {
+       collisionsCount++;
+       return false;
+    }
+     
     
     array_[current_pos] = std::move(x);
     array_[current_pos].info_ = ACTIVE;
@@ -132,7 +150,7 @@ class HashTable {
   int elementCount;
 
   int probes;
-
+  int collisionsCount;
   void setProbes(int p)
   {
     probes = p;
@@ -140,7 +158,8 @@ class HashTable {
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
-  size_t FindPos(const HashedObj & x) const {
+  //used to be a const function, now it's not
+  size_t FindPos(const HashedObj & x)  {
     //reset # of probes so it keeps accurate track of probes per entry.
     // One entry's probes are independent from another entry's. 
     int probeTemp = 0;
