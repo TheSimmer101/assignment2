@@ -58,8 +58,9 @@ class HashTable {
     return elementCount;
   }
 
-  int totalProbes()
+  int totalProbes(HashedObj& h)
   {
+    FindPos(h);
     return probes;
   }
 
@@ -72,7 +73,8 @@ class HashTable {
   explicit HashTable(size_t size = 101) : array_(NextPrime(size))
     { MakeEmpty(); }
   
-  bool Contains(const HashedObj & x) const {
+  //removed Const here because findPos() is no longer const
+  bool Contains(const HashedObj & x) {
     return IsActive(FindPos(x));
   }
   
