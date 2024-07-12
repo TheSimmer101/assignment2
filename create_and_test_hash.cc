@@ -9,6 +9,7 @@
 
 #include "quadratic_probing.h"
 #include "linear_probing.h"
+#include "double_hashing.h"
 using namespace std;
 
 
@@ -47,7 +48,6 @@ avg_collisions: <float>
 template <typename HashTableType>
 void TestFunctionForHashTable(HashTableType &hash_table, const string &words_filename,const string &query_filename) 
 {
-    //cout << "hi";
     hash_table.MakeEmpty();
     
     vector<string> words = createVector(words_filename);
@@ -79,6 +79,7 @@ void TestFunctionForHashTable(HashTableType &hash_table, const string &words_fil
 
 }
 
+
 // @argument_count: argc as provided in main
 // @argument_list: argv as provided in imain
 // Calls the specific testing function for hash table (linear, quadratic, or double).
@@ -92,25 +93,25 @@ int testHashingWrapper(int argument_count, char **argument_list) {
 	R = stoi(rvalue);
     }
 
-    // if (param_flag == "linear") {
+    if (param_flag == "linear") {
       // Uncomment below when you have implemented linear probing.
       HashTableLinear<string> linear_probing_table;
       TestFunctionForHashTable(linear_probing_table, words_filename,
       			 query_filename);
-    // } else if (param_flag == "quadratic") {
-	// HashTable<string> quadratic_probing_table;
-	// TestFunctionForHashTable(quadratic_probing_table, words_filename,
-	// 			 query_filename);
-    // } else if (param_flag == "double") {
-	// cout << "r_value: " << R << endl;
-        // Uncomment below when you have implemented double hashing.
-	// HashTableDouble<string> double_probing_table;
-	// TestFunctionForHashTable(double_probing_table, words_filename,
-	// 			 query_filename);
-    // } else {
-	// cout << "Unknown tree type " << param_flag
-	//      << " (User should provide linear, quadratic, or double)" << endl;
-    // }
+    } else if (param_flag == "quadratic") {
+	HashTable<string> quadratic_probing_table;
+	TestFunctionForHashTable(quadratic_probing_table, words_filename,
+				 query_filename);
+    } else if (param_flag == "double") {
+	cout << "r_value: " << R << endl;
+       // Uncomment below when you have implemented double hashing.
+	HashTableDouble<string> double_probing_table;
+	TestFunctionForHashTable(double_probing_table, words_filename,
+				 query_filename);
+    } else {
+	cout << "Unknown tree type " << param_flag
+	     << " (User should provide linear, quadratic, or double)" << endl;
+    }
     return 0;
 }
 
