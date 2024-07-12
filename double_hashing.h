@@ -6,7 +6,7 @@
 #include <functional>
 
 
-namespace {
+//namespace {
 
 // // // Internal method to test if a positive number is prime.
 // bool IsPrime(size_t n) {
@@ -32,7 +32,7 @@ namespace {
 //   return n;
 // }
 
-}  // namespace
+//}  // namespace
 
 
 // Quadratic probing implementation.
@@ -40,7 +40,28 @@ template <typename HashedObj>
 
 class HashTableDouble {
  public:
+bool IsPrime(size_t n) {
+  if( n == 2 || n == 3 )
+    return true;
+  
+  if( n == 1 || n % 2 == 0 )
+    return false;
+  
+  for( int i = 3; i * i <= n; i += 2 )
+    if( n % i == 0 )
+      return false;
+  
+  return true;
+}
 
+
+// // Internal method to return a prime number at least as large as n.
+int NextPrime(size_t n) {
+  if (n % 2 == 0)
+    ++n;  
+  while (!IsPrime(n)) n += 2;  
+  return n;
+}
   void setR(const int& R)
   {
     //R should be a prime number and smaller than table size.
@@ -198,12 +219,12 @@ class HashTableDouble {
         probes++; // Compute ith probe.
       // double hashing function from textbook: f(i) = i * hash2(x);
       //hash2(x) = R - (x % R)
-      //use internalHash(x) in place of x (since no guarantee x is an int)
-      //current pos already equal to internalHash(x) so it's current_pos % rvalue below
-      //current_pos =  probes * (rvalue - (InternalHash(x) % rvalue)); 
-      current_pos = 0;
+      
+      //shift index given by h(x) by i*Hash2(x)
+      current_pos = (InternalHash(x) + probes * (rvalue - (InternalHash(x) % rvalue)));  
       if (current_pos >= array_.size())
-	    current_pos -= array_.size();
+	    current_pos = current_pos% array_.size();;
+     
     }
     
     return current_pos;

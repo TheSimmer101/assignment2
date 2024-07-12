@@ -54,58 +54,55 @@ string removePunctuation(const string& s)
   return result;
 }
 
-bool oneDifference(const string& one, const string& two)
+string insertLetter(const string& str, char letter, int position)
 {
-  string temp1 = lowercase(removePunctuation(one));
-  string temp2 = lowercase(removePunctuation(two));
+  string result = "";
+  for(int i = 0; i <= str.length(); i++)
+  {
+    if(i == position)
+      result += letter;
+    result+= str[i];
+    
+    // if(position == str.length())
+    //     result+=letter;
 
-  //sorts in alphabetical order for easier comparison
-  sort(temp1.begin(), temp1.end());
-  sort(temp2.begin(), temp2.end());
+  }
+  return result;
+}
+bool oneDiff(const string& s1, const string& s2)
+{
+  string temp1 = lowercase(removePunctuation(s1));
+  string temp2 = lowercase(removePunctuation(s2));
 
-  int lengthDiff = temp1.length() - temp2.length();
-  //difference in length should be 1 if we want to recommend possible properly spelled words.
-  //taking absolute value of word1 - word2 lengths because we don't know what word is longer (no need to check with this)
-  if(abs(lengthDiff) != 1)
-    return false;
-
-  //craft
-  //brave
-  //
-    int countDiff = 0;
-
-    //for example, if we compare these 2 words:
-    //cat  -> act   (after sorting & remove punctuation)
-    //bats -> abst
-
-    int index = 0;
-
-    // while(index < temp1.length() && index < temp2.length())
-    // {
-
-    // }
-    return true;
+for(int pos1 = 0; pos1 <= temp1.length();pos1++)
+{
+  for (char c = 'a'; c <= 'z'; c++)
+  {
+      string word = insertLetter(s1,c,pos1);
+      cout << "word is: " << word << "\n";
+      if(word == s2)
+        return true;
+  }
+}
+cout << "\n\ntime for second function: \n";
+for(int pos2 = 0; pos2 <= temp2.length();pos2++)
+{
+  for (char c = 'a'; c <= 'z'; c++)
+  {
+      string word = insertLetter(s2,c,pos2);
+      cout << "word is: " << word << "\n";
+      if(word == s1)
+        return true;
+  }
+}
+ return false;
 }
 //checks case 3, if 2 words are the same and just need to swap adjacent letters to make them match
 bool needSwapAdj(const string& s1, const string& s2)
 {
-  //laws -> alsw
-  //lwas -> alsw
-  string temp1 = lowercase(removePunctuation(s1));
-  string temp2 = lowercase(removePunctuation(s2));
+  return true;
 
-  //sorts in alphabetical order for easier comparison
-  sort(temp1.begin(), temp1.end());
-  sort(temp2.begin(), temp2.end());
-
-  return (temp1 == temp2);
 }
-//three cases of misspellings:
-// a) Adding one character in any possible position
-// b) Removing one character from the word
-// c) Swapping adjacent characters in the word 
-
-
 // For each word in the document_file, it checks the 3 cases for a word being
 // misspelled and prints out possible corrections
 void SpellChecker(const HashTableDouble<string>& dictionary, const string &document_file) 
@@ -126,19 +123,25 @@ int testSpellingWrapper(int argument_count, char** argument_list) {
 
     return 0;
 }
-
+int main()
+{
+  if (oneDiff("cat","cats"))
+  {
+    cout << "\n\ntrue";
+  }
+}
 // Sample main for program spell_check.
 // WE WILL NOT USE YOUR MAIN IN TESTING. DO NOT CODE FUNCTIONALITY INTO THE
 // MAIN. WE WILL DIRECTLY CALL testSpellingWrapper. ALL FUNCTIONALITY SHOULD BE
 // THERE. This main is only here for your own testing purposes.
-int main(int argc, char** argv) {
-  if (argc != 3) {
-    cout << "Usage: " << argv[0] << " <document-file> <dictionary-file>"
-         << endl;
-    return 0;
-  }
+// int main(int argc, char** argv) {
+//   if (argc != 3) {
+//     cout << "Usage: " << argv[0] << " <document-file> <dictionary-file>"
+//          << endl;
+//     return 0;
+//   }
   
-  testSpellingWrapper(argc, argv);
+//   testSpellingWrapper(argc, argv);
   
-  return 0;
-}
+//   return 0;
+// }

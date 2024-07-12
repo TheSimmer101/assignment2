@@ -48,7 +48,7 @@ avg_collisions: <float>
 template <typename HashTableType>
 void TestFunctionForHashTable(HashTableType &hash_table, const string &words_filename,const string &query_filename) 
 {
-    hash_table.MakeEmpty();
+   // hash_table.MakeEmpty();
     
     vector<string> words = createVector(words_filename);
     //cout << words[0];
@@ -106,6 +106,7 @@ int testHashingWrapper(int argument_count, char **argument_list) {
 	cout << "r_value: " << R << endl;
        // Uncomment below when you have implemented double hashing.
 	HashTableDouble<string> double_probing_table;
+    double_probing_table.setR(R);
 	TestFunctionForHashTable(double_probing_table, words_filename,
 				 query_filename);
     } else {
