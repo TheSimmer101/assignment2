@@ -68,6 +68,37 @@ bool oneDifference(const string& one, const string& two)
   //taking absolute value of word1 - word2 lengths because we don't know what word is longer (no need to check with this)
   if(abs(lengthDiff) != 1)
     return false;
+
+  //craft
+  //brave
+  //
+    int countDiff = 0;
+
+    //for example, if we compare these 2 words:
+    //cat  -> act   (after sorting & remove punctuation)
+    //bats -> abst
+
+    int index = 0;
+
+    // while(index < temp1.length() && index < temp2.length())
+    // {
+
+    // }
+    return true;
+}
+//checks case 3, if 2 words are the same and just need to swap adjacent letters to make them match
+bool needSwapAdj(const string& s1, const string& s2)
+{
+  //laws -> alsw
+  //lwas -> alsw
+  string temp1 = lowercase(removePunctuation(s1));
+  string temp2 = lowercase(removePunctuation(s2));
+
+  //sorts in alphabetical order for easier comparison
+  sort(temp1.begin(), temp1.end());
+  sort(temp2.begin(), temp2.end());
+
+  return (temp1 == temp2);
 }
 //three cases of misspellings:
 // a) Adding one character in any possible position

@@ -8,7 +8,7 @@
 
 namespace {
 
-// // Internal method to test if a positive number is prime.
+// // // Internal method to test if a positive number is prime.
 // bool IsPrime(size_t n) {
 //   if( n == 2 || n == 3 )
 //     return true;
@@ -190,7 +190,7 @@ class HashTableDouble {
 
     
     probes = 0;
-    size_t offset = 1;
+    // size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY &&
@@ -200,8 +200,8 @@ class HashTableDouble {
       //hash2(x) = R - (x % R)
       //use internalHash(x) in place of x (since no guarantee x is an int)
       //current pos already equal to internalHash(x) so it's current_pos % rvalue below
-      current_pos =  probes * (rvalue - (current_pos % rvalue)); 
- 
+      //current_pos =  probes * (rvalue - (InternalHash(x) % rvalue)); 
+      current_pos = 0;
       if (current_pos >= array_.size())
 	    current_pos -= array_.size();
     }
@@ -230,4 +230,4 @@ class HashTableDouble {
   }
 };
 
-#endif  // QUADRATIC_PROBING_H
+#endif  // DOUBLE_HASHING_H

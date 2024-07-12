@@ -6,10 +6,10 @@
 #include <functional>
 
 
-namespace {
-//code wouldn't work with this for some reason so I commented it
+// namespace {
+// //code wouldn't work with this for some reason so I commented it
 
-// // Internal method to test if a positive number is prime.
+// // // Internal method to test if a positive number is prime.
 // bool IsPrime(size_t n) {
 //   if( n == 2 || n == 3 )
 //     return true;
@@ -33,7 +33,7 @@ namespace {
 //   return n;
 // }
 
-}  // namespace
+// }  // namespace
 
 
 // Linear probing implementation.
