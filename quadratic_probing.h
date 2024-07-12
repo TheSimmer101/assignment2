@@ -41,7 +41,7 @@ template <typename HashedObj>
 class HashTable {
  public:
 
-  size_t currentSize()
+  size_t currentSize() const
   {
     return current_size_;
   }
@@ -64,7 +64,7 @@ class HashTable {
     return probes;
   }
 
-  int totalCollisions()
+  int totalCollisions() const
   {
     return collisionsCount;
   }
@@ -153,10 +153,7 @@ class HashTable {
 
   int probes;
   int collisionsCount;
-  void setProbes(int p)
-  {
-    probes = p;
-  }
+ 
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
@@ -164,19 +161,18 @@ class HashTable {
   size_t FindPos(const HashedObj & x)  {
     //reset # of probes so it keeps accurate track of probes per entry.
     // One entry's probes are independent from another entry's. 
-    int probeTemp = 0;
+    probes = 0;
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY &&
 	   array_[current_pos].element_ != x) {
-      probeTemp++;
+      probes++;
       current_pos += offset;  // Compute ith probe.
       offset += 2;
       if (current_pos >= array_.size())
-	current_pos -= array_.size();
+	    current_pos -= array_.size();
     }
-    setProbes(probeTemp);
     return current_pos;
   }
 

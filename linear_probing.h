@@ -7,6 +7,7 @@
 
 
 namespace {
+//code wouldn't work with this for some reason so I commented it
 
 // // Internal method to test if a positive number is prime.
 // bool IsPrime(size_t n) {
@@ -41,12 +42,12 @@ template <typename HashedObj>
 class HashTableLinear {
  public:
 
-  size_t currentSize()
+  size_t currentSize() const
   {
     return current_size_;
   }
 
-  int totalElements()
+  int totalElements() 
   {
     elementCount = 0;
     for(int i = 0; i < current_size_; i++)
@@ -64,7 +65,7 @@ class HashTableLinear {
     return probes;
   }
 
-  int totalCollisions()
+  int totalCollisions() const
   {
     return collisionsCount;
   }
@@ -153,10 +154,7 @@ class HashTableLinear {
 
   int probes;
   int collisionsCount;
-  void setProbes(int p)
-  {
-    probes = p;
-  }
+  
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
@@ -164,19 +162,19 @@ class HashTableLinear {
   size_t FindPos(const HashedObj & x)  {
     //reset # of probes so it keeps accurate track of probes per entry.
     // One entry's probes are independent from another entry's. 
-    int probeTemp = 0;
+    probes = 0;
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY &&
 	   array_[current_pos].element_ != x) {
-      probeTemp++;
+      probes++;
       current_pos += offset;  // Compute ith probe. For linear offset is always 1.
       //offset += 2; Offset does not change.
       if (current_pos >= array_.size())
-	current_pos -= array_.size();
+	    current_pos -= array_.size();
     }
-    setProbes(probeTemp);
+    
     return current_pos;
   }
 

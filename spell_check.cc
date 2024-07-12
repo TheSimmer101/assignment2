@@ -1,6 +1,7 @@
 // YOUR NAME.
 // spell_check.cc: A simple spell checker.
 
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -17,13 +18,67 @@ using namespace std;
 HashTableDouble<string> MakeDictionary(const string &dictionary_file) {
   HashTableDouble<string> dictionary_hash;
   // Fill dictionary_hash.
+  ifstream words(dictionary_file);
+    if (words.fail()) {
+        cerr << "ERROR" << endl;
+        exit(1); // exit if failed to open the file
+    }
+    //words is each line.
+    //singleword extracts each word from each line.
+    string singleWord;
+    while(words >> singleWord)
+    {
+        dictionary_hash.Insert(singleWord);
+    }
   return dictionary_hash;
 }
 
+//returns a string that is the param but all lowercase
+string lowercase(const string& word)
+{
+  string result = word;
+  for(int i = 0; i < result.length(); i++)
+    result[i] = tolower(result[i]);
+
+  return result;
+}
+string removePunctuation(const string& s) 
+{
+  string result = "";
+
+  for(auto letter: s)
+  {
+    if(isalpha(letter))
+      result+=letter;
+  }
+  return result;
+}
+
+bool oneDifference(const string& one, const string& two)
+{
+  string temp1 = lowercase(removePunctuation(one));
+  string temp2 = lowercase(removePunctuation(two));
+
+  //sorts in alphabetical order for easier comparison
+  sort(temp1.begin(), temp1.end());
+  sort(temp2.begin(), temp2.end());
+
+  int lengthDiff = temp1.length() - temp2.length();
+  //difference in length should be 1 if we want to recommend possible properly spelled words.
+  //taking absolute value of word1 - word2 lengths because we don't know what word is longer (no need to check with this)
+  if(abs(lengthDiff) != 1)
+    return false;
+}
+//three cases of misspellings:
+// a) Adding one character in any possible position
+// b) Removing one character from the word
+// c) Swapping adjacent characters in the word 
+
+
 // For each word in the document_file, it checks the 3 cases for a word being
 // misspelled and prints out possible corrections
-void SpellChecker(const HashTableDouble<string>& dictionary,
-		  const string &document_file) {
+void SpellChecker(const HashTableDouble<string>& dictionary, const string &document_file) 
+{
 
 }
 

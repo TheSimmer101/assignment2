@@ -24,7 +24,7 @@ namespace {
 // }
 
 
-// // Internal method to return a prime number at least as large as n.
+// // // Internal method to return a prime number at least as large as n.
 // int NextPrime(size_t n) {
 //   if (n % 2 == 0)
 //     ++n;  
@@ -41,13 +41,26 @@ template <typename HashedObj>
 class HashTableDouble {
  public:
 
-  
-  size_t currentSize()
+  void setR(const int& R)
+  {
+    //R should be a prime number and smaller than table size.
+    if(!rAlreadySet && (IsPrime(R) && R < current_size_))
+    {
+        rvalue = R;
+        rAlreadySet = true;
+    }     
+  }
+
+  int getR() const
+  {
+    return rvalue;
+  }
+  size_t currentSize() const
   {
     return current_size_;
   }
 
-  int totalElements()
+  int totalElements() 
   {
     elementCount = 0;
     for(int i = 0; i < current_size_; i++)
@@ -59,13 +72,13 @@ class HashTableDouble {
     return elementCount;
   }
 
-  int totalProbes(HashedObj& h)
+  int totalProbes(HashedObj& h) 
   {
     FindPos(h);
     return probes;
   }
 
-  int totalCollisions()
+  int totalCollisions() const
   {
     return collisionsCount;
   }
@@ -150,15 +163,23 @@ class HashTableDouble {
 //   Q1: The total number of elements in the table (N), the size of the table (T), the load factor (N/T), the
 // total number of collisions (C), and the average number of collisions (C/N).
 
-  int rvalue;
+  size_t defaultR()
+  {
+    //must be prime and less than table size
+    size_t result = current_size_-1;
+
+    while(!IsPrime(result))
+        result--;
+
+    return result;
+  }
+  int rvalue = defaultR();
+  //public function setR() will only let user set R once, this bool used to check
+  bool rAlreadySet = 0;
   int elementCount;
 
   int probes;
   int collisionsCount;
-  void setProbes(int p)
-  {
-    probes = p;
-  }
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
@@ -166,19 +187,25 @@ class HashTableDouble {
   size_t FindPos(const HashedObj & x)  {
     //reset # of probes so it keeps accurate track of probes per entry.
     // One entry's probes are independent from another entry's. 
-    int probeTemp = 0;
+
+    
+    probes = 0;
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY &&
 	   array_[current_pos].element_ != x) {
-      probeTemp++;
-      current_pos += offset;  // Compute ith probe.
-      offset += 2;
+        probes++; // Compute ith probe.
+      // double hashing function from textbook: f(i) = i * hash2(x);
+      //hash2(x) = R - (x % R)
+      //use internalHash(x) in place of x (since no guarantee x is an int)
+      //current pos already equal to internalHash(x) so it's current_pos % rvalue below
+      current_pos =  probes * (rvalue - (current_pos % rvalue)); 
+ 
       if (current_pos >= array_.size())
-	current_pos -= array_.size();
+	    current_pos -= array_.size();
     }
-    setProbes(probeTemp);
+    
     return current_pos;
   }
 
