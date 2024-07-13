@@ -106,7 +106,7 @@ int testHashingWrapper(int argument_count, char **argument_list) {
 	cout << "r_value: " << R << endl;
        // Uncomment below when you have implemented double hashing.
 	HashTableDouble<string> double_probing_table;
-    double_probing_table.setR(R);
+   double_probing_table.setR(R);
 	TestFunctionForHashTable(double_probing_table, words_filename,
 				 query_filename);
     } else {
@@ -116,6 +116,7 @@ int testHashingWrapper(int argument_count, char **argument_list) {
     return 0;
 }
 
+ 
 // Sample main for program create_and_test_hash. DO NOT CHANGE IT.
 // WE WILL NOT USE YOUR MAIN IN TESTING. DO NOT CODE FUNCTIONALITY INTO THE
 // MAIN. WE WILL DIRECTLY CALL testHashingWrapper. ALL FUNCTIONALITY SHOULD BE

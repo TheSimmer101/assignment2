@@ -65,7 +65,7 @@ int NextPrime(size_t n) {
   void setR(const int& R)
   {
     //R should be a prime number and smaller than table size.
-    if(!rAlreadySet && (IsPrime(R) && R < current_size_))
+    if(!rAlreadySet && (IsPrime(R) && R < array_.size()))
     {
         rvalue = R;
         rAlreadySet = true;
@@ -105,9 +105,11 @@ int NextPrime(size_t n) {
   }
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTableDouble(size_t size = 101) : array_(NextPrime(size))
+  explicit HashTableDouble(int inputR, size_t size = 101) : array_(NextPrime(size)), collisionsCount(0),probes(0),elementCount(0),current_size_(0),rvalue(89)
     { MakeEmpty(); }
-  
+  explicit HashTableDouble(size_t size = 101) : array_(NextPrime(size)), collisionsCount(0),probes(0),elementCount(0),current_size_(0)
+    { MakeEmpty(); }
+
   //removed Const here because findPos() is no longer const
   bool Contains(const HashedObj & x) {
     return IsActive(FindPos(x));
@@ -184,19 +186,9 @@ int NextPrime(size_t n) {
 //   Q1: The total number of elements in the table (N), the size of the table (T), the load factor (N/T), the
 // total number of collisions (C), and the average number of collisions (C/N).
 
-  size_t defaultR()
-  {
-    //must be prime and less than table size
-    size_t result = current_size_-1;
-
-    while(!IsPrime(result))
-        result--;
-
-    return result;
-  }
-  int rvalue = defaultR();
+  int rvalue;
   //public function setR() will only let user set R once, this bool used to check
-  bool rAlreadySet = 0;
+  bool rAlreadySet;
   int elementCount;
 
   int probes;

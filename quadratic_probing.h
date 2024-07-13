@@ -91,7 +91,7 @@ int NextPrime(size_t n) {
   }
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTable(size_t size = 101) : array_(NextPrime(size))
+  explicit HashTable(size_t size = 101) : array_(NextPrime(size)), collisionsCount(0),probes(0),elementCount(0),current_size_(0)
     { MakeEmpty(); }
   
   //removed Const here because findPos() is no longer const
