@@ -54,7 +54,17 @@ string removePunctuation(const string& s)
   }
   return result;
 }
+string removeLetter(const string str, int position)
+{
+  string result = "";
+    for(int i = 0; i <= str.length(); i++)
+      {
+        if(i != position)
+          result += str[position];
+      }
 
+      return result;
+}
 string insertLetter(const string& str, char letter, int position)
 {
   string result = "";
@@ -89,7 +99,7 @@ string insertLetter(const string& str, char letter, int position)
 //         return true;
 //   }
 // }
-vector<string> oneDiff(const string& s1, HashTableDouble<string> table)
+vector<string> plusOneLetter(const string& s1, HashTableDouble<string> table)
 {
   string temp1 = lowercase(removePunctuation(s1));
   vector<string> matchingWords = {};
@@ -103,7 +113,23 @@ vector<string> oneDiff(const string& s1, HashTableDouble<string> table)
           matchingWords.push_back(word);
     }
   }
-return matchingWords;
+  return matchingWords;
+}
+
+vector<string> minusOneLetter(const string& s1, HashTableDouble<string> table)
+{
+  string temp1 = lowercase(removePunctuation(s1));
+  vector<string> matchingWords = {};
+  for(int pos1 = 0; pos1 < temp1.length();pos1++)
+  {
+        string word = "example";
+       // string word = removeLetter(s1,pos1);
+        //cout << "word is: " << word << "\n";
+        if(table.Contains(word))
+          matchingWords.push_back(word);
+  }
+  
+  return matchingWords;
 }
 //swaps letters at pos and (pos+1)
 //max value of pos must be str.length()-2
@@ -161,7 +187,7 @@ void printChecks(string str, vector<string> matches, char caseType)
 //I needed Contains() to check for spelling.
 void SpellChecker(HashTableDouble<string>& dictionary, const string &document_file) 
 {
-  cout << "hello world\n";
+  //cout << "hello world\n";
 //Cases:
 // a) Adding one character in any possible position
 // b) Removing one character from the word
@@ -177,18 +203,20 @@ void SpellChecker(HashTableDouble<string>& dictionary, const string &document_fi
     {
         if(dictionary.Contains(wordInput))
         {
-          cout << wordInput << "is CORRECT\n";
+          cout << wordInput << " is CORRECT\n";
         }
         else
         {
-          cout << wordInput << "is INCORRECT\n";
+          cout << wordInput << " is INCORRECT\n";
 
-          if(!oneDiff(wordInput,dictionary).empty())
+          if(!plusOneLetter(wordInput,dictionary).empty())
           {
-            printChecks(wordInput,oneDiff(wordInput,dictionary),'A');
+            printChecks(wordInput,plusOneLetter(wordInput,dictionary),'A');
           }
+          else if (!minusOneLetter(wordInput,dictionary).empty())
+            printChecks(wordInput,minusOneLetter(wordInput,dictionary),'B');
           else if(!needSwapAdj(wordInput,dictionary).empty())
-            printChecks(wordInput,oneDiff(wordInput,dictionary),'C');
+            printChecks(wordInput,needSwapAdj(wordInput,dictionary),'C');
         }
     }
 
