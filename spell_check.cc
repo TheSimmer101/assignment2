@@ -2,6 +2,7 @@
 // spell_check.cc: A simple spell checker.
 
 #include <cmath>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -69,44 +70,125 @@ string insertLetter(const string& str, char letter, int position)
   }
   return result;
 }
-bool oneDiff(const string& s1, const string& s2)
+//returns true if s1 + 1 letter == s2
+// bool oneDiff(const string& s1, const string& s2)
+// {
+//   string temp1 = lowercase(removePunctuation(s1));
+//   string temp2 = lowercase(removePunctuation(s2));
+// int lengthDiff = temp1.length()-temp2.length();
+// if(abs(lengthDiff)!=1)
+//   return false;
+
+// for(int pos1 = 0; pos1 <= temp1.length();pos1++)
+// {
+//   for (char c = 'a'; c <= 'z'; c++)
+//   {
+//       string word = insertLetter(s1,c,pos1);
+//       cout << "word is: " << word << "\n";
+//       if(word == s2)
+//         return true;
+//   }
+// }
+bool oneDiff(const string& s1, HashTableDouble<string> table)
 {
   string temp1 = lowercase(removePunctuation(s1));
-  string temp2 = lowercase(removePunctuation(s2));
 
-for(int pos1 = 0; pos1 <= temp1.length();pos1++)
-{
-  for (char c = 'a'; c <= 'z'; c++)
+  for(int pos1 = 0; pos1 <= temp1.length();pos1++)
   {
-      string word = insertLetter(s1,c,pos1);
-      cout << "word is: " << word << "\n";
-      if(word == s2)
-        return true;
+    for (char c = 'a'; c <= 'z'; c++)
+    {
+        string word = insertLetter(s1,c,pos1);
+        //cout << "word is: " << word << "\n";
+        if(table.Contains(word))
+          return true;
+    }
   }
-}
-cout << "\n\ntime for second function: \n";
-for(int pos2 = 0; pos2 <= temp2.length();pos2++)
-{
-  for (char c = 'a'; c <= 'z'; c++)
-  {
-      string word = insertLetter(s2,c,pos2);
-      cout << "word is: " << word << "\n";
-      if(word == s1)
-        return true;
-  }
-}
+
+// cout << "\n\ntime for second function: \n";
+// for(int pos2 = 0; pos2 <= temp2.length();pos2++)
+// {
+//   for (char c = 'a'; c <= 'z'; c++)
+//   {
+//       string word = insertLetter(s2,c,pos2);
+//       cout << "word is: " << word << "\n";
+//       if(word == s1)
+//         return true;
+//   }
+// }
  return false;
+}
+//swaps letters at pos and (pos+1)
+//max value of pos must be str.length()-2
+string swapAdj(const string& str,int pos)
+{
+  if(pos < 0 || pos > str.length()-2)
+    return "";
+
+  string result;
+
+  for(int i = 0; i<str.length()-2;i++)
+  {
+    if(i == pos)
+    {
+      result+=str[pos+1];
+    }
+    else if(i == (pos+1))
+      result+=str[pos];
+    else
+      result+=str[i];
+  }
+  return result;
 }
 //checks case 3, if 2 words are the same and just need to swap adjacent letters to make them match
 bool needSwapAdj(const string& s1, const string& s2)
 {
-  return true;
+  string temp1 = lowercase(removePunctuation(s1));
+  string temp2 = lowercase(removePunctuation(s2));
+  if(temp1.length()!= temp2.length())
+    return false;
+ 
+  for(int i = 0; i <=temp1.length()-2;i++)
+  {
+    string swapped = swapAdj(temp1,i);
+    if(swapped == temp2)
+      return true;
+  }
+  return false;
 
 }
 // For each word in the document_file, it checks the 3 cases for a word being
 // misspelled and prints out possible corrections
-void SpellChecker(const HashTableDouble<string>& dictionary, const string &document_file) 
+//removed const from dictionary parameter (Contains() is not a const function because I had to make findPos() a non-const function)
+//I needed Contains() to check for spelling.
+void SpellChecker(HashTableDouble<string>& dictionary, const string &document_file) 
 {
+//Cases:
+// a) Adding one character in any possible position
+// b) Removing one character from the word
+// c) Swapping adjacent characters in the word 
+//ifstream code copied from 135 Lab 3 Instructions (Fall 2023)
+  ifstream doc(document_file);
+  if (doc.fail()) {
+          cerr << "ERROR" << endl;
+          exit(1); // exit if failed to open the file
+      }
+  string wordInput = "";
+    while(doc >> wordInput)
+    {
+        if(dictionary.Contains(wordInput))
+        {
+          cout << wordInput << "is CORRECT\n";
+        }
+        else
+        {
+          cout << wordInput << "is INCORRECT\n";
+
+          if(oneDiff(wordInput,dictionary))
+          {
+            cout << "**" << wordInput << " -> <alternate word> ** case <TYPE: A, B or C>";
+          }
+        }
+    }
 
 }
 
@@ -123,25 +205,25 @@ int testSpellingWrapper(int argument_count, char** argument_list) {
 
     return 0;
 }
-int main()
-{
-  if (oneDiff("cat","cats"))
-  {
-    cout << "\n\ntrue";
-  }
-}
+// int main()
+// {
+//   if (oneDiff("cat","cats"))
+//   {
+//     cout << "\n\ntrue";
+//   }
+// }
 // Sample main for program spell_check.
 // WE WILL NOT USE YOUR MAIN IN TESTING. DO NOT CODE FUNCTIONALITY INTO THE
 // MAIN. WE WILL DIRECTLY CALL testSpellingWrapper. ALL FUNCTIONALITY SHOULD BE
 // THERE. This main is only here for your own testing purposes.
-// int main(int argc, char** argv) {
-//   if (argc != 3) {
-//     cout << "Usage: " << argv[0] << " <document-file> <dictionary-file>"
-//          << endl;
-//     return 0;
-//   }
+int main(int argc, char** argv) {
+  if (argc != 3) {
+    cout << "Usage: " << argv[0] << " <document-file> <dictionary-file>"
+         << endl;
+    return 0;
+  }
   
-//   testSpellingWrapper(argc, argv);
+  testSpellingWrapper(argc, argv);
   
-//   return 0;
-// }
+  return 0;
+}

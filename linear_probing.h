@@ -195,7 +195,7 @@ int NextPrime(size_t n) {
       if (current_pos >= array_.size())
 	    current_pos -= array_.size();
     }
-    
+    collisionsCount+=probes;
     return current_pos;
   }
 

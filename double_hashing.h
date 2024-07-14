@@ -201,7 +201,8 @@ int NextPrime(size_t n) {
     //reset # of probes so it keeps accurate track of probes per entry.
     // One entry's probes are independent from another entry's. 
 
-    
+
+
     probes = 0;
     // size_t offset = 1;
     size_t current_pos = InternalHash(x);
@@ -218,7 +219,7 @@ int NextPrime(size_t n) {
 	    current_pos = current_pos% array_.size();;
      
     }
-    
+    collisionsCount+=probes;
     return current_pos;
   }
 
