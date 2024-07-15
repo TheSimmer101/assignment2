@@ -22,7 +22,7 @@ HashTableDouble<string> MakeDictionary(const string &dictionary_file) {
   ifstream words(dictionary_file);
     if (words.fail()) {
         cerr << "ERROR" << endl;
-        exit(1); // exit if failed to open the file
+        return dictionary_hash; // exit if failed to open the file
     }
     //words is each line.
     //singleword extracts each word from each line.
@@ -43,6 +43,7 @@ string lowercase(const string& word)
 
   return result;
 }
+
 string removePunctuation(const string& s) 
 {
   string result = "";
@@ -54,6 +55,7 @@ string removePunctuation(const string& s)
   }
   return result;
 }
+//returns param string with every letter except the letter at param position
 string removeLetter(const string str, int position)
 {
   string result = "";
@@ -65,6 +67,7 @@ string removeLetter(const string str, int position)
 
       return result;
 }
+//insert param letter in str at param position
 string insertLetter(const string& str, char letter, int position)
 {
   string result = "";
@@ -80,25 +83,10 @@ string insertLetter(const string& str, char letter, int position)
   }
   return result;
 }
-//returns true if s1 + 1 letter == s2
-// bool oneDiff(const string& s1, const string& s2)
-// {
-//   string temp1 = lowercase(removePunctuation(s1));
-//   string temp2 = lowercase(removePunctuation(s2));
-// int lengthDiff = temp1.length()-temp2.length();
-// if(abs(lengthDiff)!=1)
-//   return false;
 
-// for(int pos1 = 0; pos1 <= temp1.length();pos1++)
-// {
-//   for (char c = 'a'; c <= 'z'; c++)
-//   {
-//       string word = insertLetter(s1,c,pos1);
-//       cout << "word is: " << word << "\n";
-//       if(word == s2)
-//         return true;
-//   }
-// }
+//adds 1 letter at every possible position and adds it to result vector if string+letter exists in table.
+//example: ant becomes-> cant,pant,want,aint,ants,anti, etc.
+//if those are actual words that exist in table, we add it to the vector (which is returned later)
 vector<string> plusOneLetter(const string& s1, HashTableDouble<string> table)
 {
   string temp1 = lowercase(removePunctuation(s1));
@@ -116,14 +104,16 @@ vector<string> plusOneLetter(const string& s1, HashTableDouble<string> table)
   return matchingWords;
 }
 
+//same idea as plusOneLetter() except it removes one letter at each possible position at a time.
+//if word minus letter exists in table, add to result vector.
 vector<string> minusOneLetter(const string& s1, HashTableDouble<string> table)
 {
   string temp1 = lowercase(removePunctuation(s1));
   vector<string> matchingWords = {};
   for(int pos1 = 0; pos1 < temp1.length();pos1++)
   {
-        string word = "example";
-       // string word = removeLetter(s1,pos1);
+       
+        string word = removeLetter(s1,pos1);
         //cout << "word is: " << word << "\n";
         if(table.Contains(word))
           matchingWords.push_back(word);
@@ -171,18 +161,21 @@ vector<string> matches = {};
 
 }
 
+//takes in vector of strings 
 void printChecks(string str, vector<string> matches, char caseType)
 {
   cout << str << " is INCORRECT\n";
 
   for(string m: matches)
   {
-    cout << "**" << str << "-> <alternate word> ** case " << toupper(caseType) << "\n";
+    cout << m;
+    //cout << "**" << str << "-> " << m << "** case " << toupper(caseType) << "\n";
   }
 
 }
 // For each word in the document_file, it checks the 3 cases for a word being
 // misspelled and prints out possible corrections
+
 //removed const from dictionary parameter (Contains() is not a const function because I had to make findPos() a non-const function)
 //I needed Contains() to check for spelling.
 void SpellChecker(HashTableDouble<string>& dictionary, const string &document_file) 
@@ -198,7 +191,7 @@ void SpellChecker(HashTableDouble<string>& dictionary, const string &document_fi
           cerr << "ERROR" << endl;
           exit(1); // exit if failed to open the file
       }
-  string wordInput = "";
+    string wordInput = "";
     while(doc >> wordInput)
     {
         if(dictionary.Contains(wordInput))
@@ -235,13 +228,7 @@ int testSpellingWrapper(int argument_count, char** argument_list) {
 
     return 0;
 }
-// int main()
-// {
-//   if (oneDiff("cat","cats"))
-//   {
-//     cout << "\n\ntrue";
-//   }
-// }
+
 // Sample main for program spell_check.
 // WE WILL NOT USE YOUR MAIN IN TESTING. DO NOT CODE FUNCTIONALITY INTO THE
 // MAIN. WE WILL DIRECTLY CALL testSpellingWrapper. ALL FUNCTIONALITY SHOULD BE

@@ -69,6 +69,7 @@ int NextPrime(size_t n) {
     {
         rvalue = R;
         rAlreadySet = true;
+        Rehash();
     }     
   }
 
